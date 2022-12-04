@@ -1,0 +1,54 @@
+{
+  "detail": {
+    "title": "Implementierung",
+    "subTitle": "Wähle ein framework",
+    "clipboard": {
+      "copy": "Kopieren",
+      "copied": "Kopiert"
+    }
+  },
+  "list": {
+    "title": "Repositories",
+    "empty": "Kein Inhalt gefunden"
+  },
+  "search": {
+    "title": "Suche",
+    "subTitle": "Suche nach einer repository"
+  },
+  "login": {
+    "title": "Anmelden",
+    "subTitle": "Melden Sie sich mit Ihren persönlichen Daten an",
+    "form": {
+      "user": "Benutzername",
+      "password": "Passwort",
+      "submit": "Melde dich mit deinem Account an"
+    }
+  },
+  "logout": {
+    "title": "Abmelden",
+    "subTitle": "Melde dich von deiner derzeitigen Sitzung ab",
+    "form": {
+      "submit": "Melde dich von deinem Account ab"
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "subTitle": "Passen Sie die Webseite an Ihre Bedürfnisse an",
+    "specialEndings": "Spezielle Endungen",
+    "colorscheme": "Farbschema",
+    "language": "Sprache"
+  },
+  "notifications": {
+    "login": {
+      "title": "Anmeldung",
+      "noFields": "Bitte fülle alle Felder aus.",
+      "wrongData": "Es wurde kein Konto mit diesen Daten gefunden.",
+      "success": "Du bist nun angemeldet.",
+      "failed": "Es ist ein Fehler bei der Überprüfung aufgetreten."
+    },
+    "logout": {
+      "title": "Abmeldung",
+      "success": "Du bist nun abgemeldet."
+    }
+  }
+}

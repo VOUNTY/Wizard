@@ -1,0 +1,54 @@
+{
+  "detail" : {
+    "title" : "Mettre en œuvre",
+    "subTitle" : "Choisissez votre cadre",
+    "clipboard" : {
+      "copy" : "Copier",
+      "copied" : "Copié"
+    }
+  },
+  "list" : {
+    "title" : "Dépôts",
+    "empty" : "Aucun contenu trouvé"
+  },
+  "search" : {
+    "title" : "Recherche",
+    "subTitle" : "Recherche d'un référentiel"
+  },
+  "login" : {
+    "title" : "S'inscrire",
+    "subTitle" : "Connectez-vous avec vos données personnelles",
+    "form" : {
+      "user" : "Nom d'utilisateur",
+      "password" : "Mot de passe",
+      "submit" : "Connectez-vous à votre compte"
+    }
+  },
+  "logout" : {
+    "title" : "Se désinscrire",
+    "subTitle" : "Déconnexion de votre session actuelle",
+    "form" : {
+      "submit" : "Déconnexion de votre compte"
+    }
+  },
+  "settings" : {
+    "title" : "Paramètres",
+    "subTitle" : "Personnalisez le site Web en fonction de vos besoins",
+    "specialEndings": "Les fins spécialesn",
+    "colorscheme" : "Schéma de couleurs",
+    "language" : "Langue"
+  },
+  "notifications" : {
+    "login" : {
+      "title" : "Inscription",
+      "noFields" : "Veuillez remplir les champs.",
+      "wrongData" : "Impossible de trouver un compte avec ces données.",
+      "success" : "Vous êtes maintenant connecté.",
+      "failed": "Une erreur s'est produite pendant la vérification."
+    },
+    "logout": {
+      "title": "Déconnexion",
+      "success": "Vous êtes maintenant déconnecté."
+    }
+  }
+}

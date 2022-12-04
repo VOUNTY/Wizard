@@ -1,0 +1,54 @@
+{
+  "detail": {
+    "title": "Implement",
+    "subTitle": "Choose your framework",
+    "clipboard": {
+      "copy": "Copy",
+      "copied": "Copied"
+    }
+  },
+  "list": {
+    "title": "Repositories",
+    "empty": "No content found"
+  },
+  "search": {
+    "title": "Search",
+    "subTitle": "Search for a repository"
+  },
+  "login": {
+    "title": "Login",
+    "subTitle": "Log in with your personal data",
+    "form": {
+      "user": "Username",
+      "password": "Password",
+      "submit": "Login into your account"
+    }
+  },
+  "logout": {
+    "title": "Logout",
+    "subTitle": "Log out your current session",
+    "form": {
+      "submit": "Logout from your account"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subTitle": "Customise the website to your needs",
+    "specialEndings": "Special Endings",
+    "colorscheme": "Colorscheme",
+    "language": "Language"
+  },
+  "notifications": {
+    "login": {
+      "title": "Login",
+      "noFields": "Please fill in the fields.",
+      "wrongData": "Unable to find account with this data.",
+      "success": "You are now logged in.",
+      "failed": "An error occurred during the check."
+    },
+    "logout": {
+      "title": "Logout",
+      "success": "You are now logged out."
+    }
+  }
+}
