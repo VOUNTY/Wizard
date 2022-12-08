@@ -9,9 +9,10 @@ public class WizardConfiguration {
 
     private final Protocol protocol;
     private final SSL ssl;
+    private final Threads threads;
 
     public static WizardConfiguration getDefault() {
-        return new WizardConfiguration(Protocol.getDefault(), SSL.getDefault());
+        return new WizardConfiguration(Protocol.getDefault(), SSL.getDefault(), Threads.getDefault());
     }
 
     @Getter

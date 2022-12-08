@@ -3,14 +3,13 @@ package net.vounty.wizard.server.routes.repository;
 import net.vounty.wizard.repository.content.Content;
 import net.vounty.wizard.server.routes.WizardRoute;
 import net.vounty.wizard.service.Wizard;
+import net.vounty.wizard.utils.config.DependencyConfiguration;
 import net.vounty.wizard.utils.enums.Visible;
 import spark.Request;
 import spark.Response;
 import spark.Spark;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 public class RepositoryContentRoute extends WizardRoute {
 
@@ -34,7 +33,7 @@ public class RepositoryContentRoute extends WizardRoute {
                 .replace("/s/" + repositoryName + "/", "")
                 .replace("/", "//");
         if (repository.getVisible().equals(Visible.PUBLIC))
-            return new Result(repository.getContents(pathInfo));
+            return repository.getRouteResult(pathInfo);
 
         if (repository.getVisible().equals(Visible.PRIVATE)) {
             final var authorization = request.headers("Authorization");
@@ -49,11 +48,12 @@ public class RepositoryContentRoute extends WizardRoute {
             if (!repository.getTokens().contains(token.getUniqueId()))
                 Spark.halt(403);
 
-            return new Result(repository.getContents(pathInfo));
+            return repository.getRouteResult(pathInfo);
         }
+        Spark.halt(204);
         return null;
     }
 
-    record Result(List<Content> contents) {}
+    public record Result(DependencyConfiguration dependency, List<Content> contents) {}
 
 }

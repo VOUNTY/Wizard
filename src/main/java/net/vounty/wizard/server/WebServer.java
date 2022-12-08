@@ -29,6 +29,7 @@ public class WebServer implements Server {
         if (configuration.getSsl().getEnabled())
             Spark.secure(configuration.getSsl().getKeystoreFilePath(), configuration.getSsl().getKeystorePassword(), configuration.getSsl().getTruststoreFilePath(), configuration.getSsl().getTruststorePassword());
 
+        Spark.threadPool(configuration.getThreads().getMax(), configuration.getThreads().getMin(), configuration.getThreads().getTimeoutMillis());
         Spark.staticFiles.location("/web");
 
         Spark.defaultResponseTransformer(new JsonTransformer());

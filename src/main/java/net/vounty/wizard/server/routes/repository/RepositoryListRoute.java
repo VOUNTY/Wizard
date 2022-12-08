@@ -31,7 +31,7 @@ public class RepositoryListRoute extends WizardRoute {
                 final var token = optionalToken.get();
                 return token.getActive() && repository.getTokens().contains(token.getUniqueId());
             }
-            return true;
+            return !repository.getVisible().equals(Visible.HIDDEN);
         }).forEach(repository -> list.add(new Result(repository.getName(), repository.getUniqueId())));
         return list;
     }

@@ -1,6 +1,6 @@
 package net.vounty.wizard.repository;
 
-import net.vounty.wizard.repository.content.Content;
+import net.vounty.wizard.server.routes.repository.RepositoryContentRoute;
 import net.vounty.wizard.utils.enums.Visible;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +15,8 @@ public interface Repository {
     WizardRepository.TokenStatus pushToken(UUID uniqueId);
     WizardRepository.TokenStatus dropToken(UUID uniqueId);
     void toggleVisible();
-    List<Content> getContents(String path);
+
+    RepositoryContentRoute.Result getRouteResult(String path);
 
     UUID getUniqueId();
     String getName();

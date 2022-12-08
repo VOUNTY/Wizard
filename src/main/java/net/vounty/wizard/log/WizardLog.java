@@ -173,7 +173,7 @@ public class WizardLog implements Log {
     }
 
     private String format(LogState state, String message) {
-        final var format = " %clock% §7- " + state.format() + " §7>§r ";
+        final var format = " %clock% §7- " + state.format() + "§7:§r ";
         final var dateFormat = new SimpleDateFormat("hh:mm:ss a", Locale.US);
         return SystemColor.replace(format + message).replace("%clock%", dateFormat.format(new Date()));
     }

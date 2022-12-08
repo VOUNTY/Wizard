@@ -11,6 +11,10 @@
     "title" : "Dépôts",
     "empty" : "Aucun contenu trouvé"
   },
+  "dependencies": {
+    "title": "Dépendances utilisées",
+    "empty" : "Aucun contenu trouvé"
+  },
   "search" : {
     "title" : "Recherche",
     "subTitle" : "Recherche d'un référentiel"

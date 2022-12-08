@@ -11,6 +11,10 @@
     "title": "Repositories",
     "empty": "Kein Inhalt gefunden"
   },
+  "dependencies": {
+    "title": "Verwendete Abhängigkeiten",
+    "empty": "Kein Inhalt gefunden"
+  },
   "search": {
     "title": "Suche",
     "subTitle": "Suche nach einer repository"

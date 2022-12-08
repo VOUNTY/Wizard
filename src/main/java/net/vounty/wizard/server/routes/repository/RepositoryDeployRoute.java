@@ -39,22 +39,15 @@ public class RepositoryDeployRoute extends WizardRoute {
             && !repository.getTokens().contains(token.getUniqueId()))
             Spark.halt(403);
 
-        try {
-            final var xRealIp = request.headers("X-Real-IP");
+        final var xRealIp = request.headers("X-Real-IP");
+        if (this.getWizard().getSecureAdapter().existAddress(xRealIp))
+            Spark.halt(405);
 
-            if (this.getWizard().getSecureAdapter().existAddress(xRealIp))
-                Spark.halt(405);
+        final var userAgent = request.headers("User-Agent");
+        final var framework = Framework.fetch(userAgent);
 
-            final var userAgent = request.headers("User-Agent");
-            final var framework = Framework.fetch(userAgent);
-
-            repository.download(request.raw());
-            this.getWizard().getLog().info("User §b{0}§r (§1{1}§r) deploying on §b{2}§r via §1{3}§r",
-                    token.getUserName(), xRealIp, repository.getName(), framework);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-        Spark.halt(204);
+        repository.download(request.raw());
+        this.getWizard().getLog().info("User §b{0}§r (§1{1}§r) deploying on §b{2}§r via §1{3}§r", token.getUserName(), xRealIp, repository.getName(), framework);
         return null;
     }
 

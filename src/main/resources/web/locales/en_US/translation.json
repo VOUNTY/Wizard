@@ -11,6 +11,10 @@
     "title": "Repositories",
     "empty": "No content found"
   },
+  "dependencies": {
+    "title": "Used Dependencies",
+    "empty": "No content found"
+  },
   "search": {
     "title": "Search",
     "subTitle": "Search for a repository"
