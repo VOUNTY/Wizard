@@ -12,13 +12,13 @@
 
 ## About [❤]
 
-<a href="#about"></a>
+<a id="about"></a>
 Wizard is a small repository management tool published by the developer group [VountyNetwork](https://vounty.net). <br />
 With built-in security systems and future-oriented frameworks, Wizard is the perfect tool for your projects.
 
 ## Features [🎉️]
 
-<a href="#features"></a>
+<a id="features"></a>
 
 * ✅ Simple and easy to use command line interface (CLI)
 * ✅ Light-speed installation
@@ -38,17 +38,17 @@ With built-in security systems and future-oriented frameworks, Wizard is the per
 * Enough memory
 * Browser
 
-<a href="#requirements"></a>
+<a id="requirements"></a>
 
 ## Documentation [📰]
 
 Documentation on installing and using **Wizard** can be found on the [official documentation website from VountyNetwork](https://docs.vounty.net/).
 
-<a href="#documentation"></a>
+<a id="documentation"></a>
 
 ## Preview Images [👀️]
 
-<a href="#images"></a>
+<a id="images"></a>
 ![01_d](./images/images_01_dark.png)
 ![01_l](./images/images_01_light.png)
 ![02_d](./images/images_02_dark.png)
