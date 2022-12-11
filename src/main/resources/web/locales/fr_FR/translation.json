@@ -35,6 +35,10 @@
       "submit" : "Déconnexion de votre compte"
     }
   },
+  "fileView": {
+    "title": "Aperçu du fichier",
+    "subTitle": "Vous voyez le contenu du fichier"
+  },
   "settings" : {
     "title" : "Paramètres",
     "subTitle" : "Personnalisez le site Web en fonction de vos besoins",

@@ -1,0 +1,26 @@
+|-----------------------------------------------------------------------------------
+| The product Wizard, which was made available to everyone
+| by the developer group "VountyNetwork", used third-party vendors among others.
+| These are systems that simplify the work of Wizard or provide a neat structure.
+|-----------------------------------------------------------------------------------
+
+This includes the following third-party providers for background processing:
+- JBCrypt (org.mindrot jbcrypt)
+- Gson (com.google.code.gson gson)
+- JLine (org.jline jline)
+- Spark (com.sparkjava spark-core)
+- Apache Commons (org.apache.commons commons-lang3)
+- Lombok (org.projectlombok lombok)
+
+Likewise, third party was also used for the web interface:
+
+    Frameworks & Tools
+    - ReactJS (https://reactjs.org/)
+    - ViteJS (https://vitejs.dev/)
+
+    UI Library
+    - Mantine (https://mantine.dev/)
+
+    External Libraries
+    - axios (https://axios-http.com/)
+    - i18next (https://www.i18next.com/)

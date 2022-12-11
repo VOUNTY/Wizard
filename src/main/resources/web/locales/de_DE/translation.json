@@ -35,6 +35,10 @@
       "submit": "Melde dich von deinem Account ab"
     }
   },
+  "fileView": {
+    "title": "Dateivorschau",
+    "subTitle": "Du siehst den Inhalt der Datei"
+  },
   "settings": {
     "title": "Einstellungen",
     "subTitle": "Passen Sie die Webseite an Ihre Bedürfnisse an",

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(staticName = "of")
 public class RepositoryContent implements Content {
 
-    private final String name;
+    private final String name, folder;
     private final Boolean isFile;
     private final Long size;
 

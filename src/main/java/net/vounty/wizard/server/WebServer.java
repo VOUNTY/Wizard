@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.vounty.wizard.server.routes.config.ConfigGetRoute;
-import net.vounty.wizard.server.routes.repository.RepositoryContentRoute;
-import net.vounty.wizard.server.routes.repository.RepositoryDeployRoute;
-import net.vounty.wizard.server.routes.repository.RepositoryListRoute;
+import net.vounty.wizard.server.routes.repository.*;
 import net.vounty.wizard.server.routes.token.TokenLoginRoute;
 import net.vounty.wizard.server.transform.JsonTransformer;
 import net.vounty.wizard.service.Wizard;
@@ -51,6 +49,8 @@ public class WebServer implements Server {
             Spark.get("config/website", new ConfigGetRoute(this.getWizard()));
         });
         Spark.get("/s/:repository/*", new RepositoryContentRoute(this.getWizard()));
+        Spark.get("/v/:repository/*", new RepositoryViewRoute(this.getWizard()));
+        Spark.get(":repository/*", new RepositoryFetchRoute(this.getWizard()));
         Spark.put(":repository/*", new RepositoryDeployRoute(this.getWizard()));
 
         Spark.init();

@@ -10,6 +10,7 @@ import java.util.UUID;
 public interface Repository {
 
     void download(HttpServletRequest request) throws Exception;
+    String viewFile(String path);
 
     WizardRepository.NameStatus changeName(String newName);
     WizardRepository.TokenStatus pushToken(UUID uniqueId);

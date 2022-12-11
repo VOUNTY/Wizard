@@ -15,8 +15,10 @@ import org.w3c.dom.Element;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
@@ -64,7 +66,8 @@ public class WizardRepository implements Repository {
         final var folder = new File(this.getFolder() + folderPath);
         folder.mkdirs();
 
-        final var file = new File(this.getFolder() + path.replace(this.getName(), ""));
+        final var filePath = this.getFolder() + path.replace(this.getName(), "");
+        final var file = new File(filePath);
         final var inputStream = request.getInputStream();
         final var outputStream = new FileOutputStream(file);
         inputStream.transferTo(outputStream);
@@ -79,6 +82,27 @@ public class WizardRepository implements Repository {
                 this.getDependencyConfiguration(this.hasPomFile(path)),
                 this.getContents(path)
         );
+    }
+
+    @Override
+    public String viewFile(String path) {
+        try {
+            final var file = new File(this.getFolder() + path);
+            if (!file.exists())
+                return null;
+
+            final var inputReader = new FileReader(file);
+            final var reader = new BufferedReader(inputReader);
+            final var builder = new StringBuilder();
+
+            var line = "";
+            while ((line = reader.readLine()) != null)
+                builder.append(line).append("\n");
+
+            return builder.toString();
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 
     private DependencyConfiguration getDependencyConfiguration(File file) {
@@ -153,7 +177,7 @@ public class WizardRepository implements Repository {
 
             for (final var content : contents) {
                 final var size = content.isDirectory() ? -1 : Files.size(content.toPath());
-                array.add(RepositoryContent.of(content.getName(), content.isFile(), size));
+                array.add(RepositoryContent.of(content.getName(), path, content.isFile(), size));
             }
             return array;
         } catch (Exception exception) {

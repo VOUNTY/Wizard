@@ -35,6 +35,10 @@
       "submit": "Logout from your account"
     }
   },
+  "fileView": {
+    "title": "File Preview",
+    "subTitle": "You see the content of the file"
+  },
   "settings": {
     "title": "Settings",
     "subTitle": "Customise the website to your needs",
@@ -53,6 +57,10 @@
     "logout": {
       "title": "Logout",
       "success": "You are now logged out."
+    },
+    "fileView": {
+      "title": "File view",
+      "error": "Unable to read this file."
     }
   }
 }
