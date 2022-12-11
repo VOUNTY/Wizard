@@ -22,16 +22,13 @@ public class TokenLoginRoute extends WizardRoute {
             Spark.halt(500);
 
         final var optionalToken = this.getWizard().getTokenAdapter().getToken(tokenBody.getUser(), tokenBody.getPassword());
-        if (optionalToken.isEmpty())
-            Spark.halt(401);
-
-        Spark.halt(204);
+        Spark.halt(optionalToken.isPresent() ? 204 : 401);
         return null;
     }
 
     @Getter
     @AllArgsConstructor
-    public class TokenBody {
+    public static class TokenBody {
 
         private final String user, password;
 

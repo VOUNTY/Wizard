@@ -9,6 +9,7 @@ import net.vounty.wizard.utils.config.LoggerConfiguration;
 import net.vounty.wizard.utils.enums.LogState;
 import net.vounty.wizard.utils.enums.PathState;
 import net.vounty.wizard.utils.enums.SystemColor;
+import org.jline.reader.LineReader;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -92,7 +93,7 @@ public class WizardLog implements Log {
 
     @Override
     public void trace(LogState state, Throwable throwable) {
-        System.out.println(this.format(state, throwable.getMessage()));
+        this.write(this.format(state, throwable.getMessage()));
         final var traceElements = new LinkedList<>(Arrays.stream(throwable.getStackTrace()).toList());
         if (throwable.getCause() != null) traceElements.addAll(Arrays.stream(throwable.getCause().getStackTrace()).toList());
         if (throwable.getSuppressed() != null) {
@@ -112,10 +113,20 @@ public class WizardLog implements Log {
     public void log(LogState state, String message, Object... replacements) {
         final var replacedContent = this.replacePlaceHolders(message, replacements);
         final var endResult = this.format(state, replacements.length > 0 ? replacedContent : message);
-
-//        this.getWizard().getConsole().getTerminal().writer().println(endResult);
-        System.out.println(endResult);
+        this.write(endResult);
         this.writeConfiguration(Collections.singletonList(replacedContent));
+    }
+
+    private void write(String message) {
+        final var console = this.getWizard().getConsole();
+        if (console.getLineReader().isReading())
+            console.getLineReader().callWidget(LineReader.CLEAR);
+        console.getTerminal().writer().println(message);
+        if (console.getLineReader().isReading()) {
+            console.getLineReader().callWidget(LineReader.REDRAW_LINE);
+            console.getLineReader().callWidget(LineReader.REDISPLAY);
+        }
+        console.getTerminal().flush();
     }
 
     private void writeConfiguration(List<String> array) {

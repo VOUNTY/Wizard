@@ -35,23 +35,19 @@ public class RepositoryContentRoute extends WizardRoute {
         if (repository.getVisible().equals(Visible.PUBLIC))
             return repository.getRouteResult(pathInfo);
 
-        if (repository.getVisible().equals(Visible.PRIVATE)) {
-            final var authorization = request.headers("Authorization");
-            if (authorization == null)
-                Spark.halt(401);
+        final var authorization = request.headers("Authorization");
+        if (authorization == null)
+            Spark.halt(401);
 
-            final var optionalToken = this.getWizard().getTokenAdapter().getTokenFromAuthorization(authorization);
-            if (optionalToken.isEmpty())
-                Spark.halt(401);
+        final var optionalToken = this.getWizard().getTokenAdapter().getTokenFromAuthorization(authorization);
+        if (optionalToken.isEmpty())
+            Spark.halt(401);
 
-            final var token = optionalToken.get();
-            if (!repository.getTokens().contains(token.getUniqueId()))
-                Spark.halt(403);
+        final var token = optionalToken.get();
+        if (!repository.getTokens().contains(token.getUniqueId()))
+            Spark.halt(403);
 
-            return repository.getRouteResult(pathInfo);
-        }
-        Spark.halt(204);
-        return null;
+        return repository.getRouteResult(pathInfo);
     }
 
     public record Result(DependencyConfiguration dependency, List<Content> contents) {}

@@ -88,7 +88,12 @@ public class WizardRepository implements Repository {
     public String viewFile(String path) {
         try {
             final var file = new File(this.getFolder() + path);
-            if (!file.exists())
+            if (!file.exists() || file.isDirectory())
+                return null;
+
+            final var names = List.of("pom", "xml");
+            final var values = file.getName().split("\\.");
+            if (!names.contains(values[values.length - 1].toLowerCase()))
                 return null;
 
             final var inputReader = new FileReader(file);

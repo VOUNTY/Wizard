@@ -28,7 +28,7 @@ public class RepositoryCommand extends WizardCommand {
                         }
                         this.getLog().info("List all §b{0}§r repositories:", repositories.size());
                         repositories.forEach(repository ->
-                                this.getLog().info(" §b{0}§r (ID: §1{1}§r, Visible: §2{2}§r)", repository.getName(), repository.getUniqueId(), repository.getVisible()));
+                                this.getLog().info(" §b{0}§r (ID: §1{1}§r, Visible: §1{2}§r)", repository.getName(), repository.getUniqueId(), repository.getVisible()));
                     }
                     default -> { return true; }
                 }

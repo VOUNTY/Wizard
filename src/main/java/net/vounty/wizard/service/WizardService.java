@@ -59,9 +59,11 @@ public class WizardService implements Wizard {
         this.getTokenAdapter().loadFromConfiguration();
         this.getSecureAdapter().loadFromConfiguration();
 
-        this.getConsole().clearConsole();
-        this.getConsole().initialize();
-        this.getServer().start();
+        this.getServer().start(host -> {
+            this.getConsole().initialize();
+            this.getConsole().clearConsole();
+            this.getLog().info("WebServer listening on {0}", host);
+        });
 
         this.getCommandAdapter().register(new HelpCommand());
         this.getCommandAdapter().register(new ExitCommand());

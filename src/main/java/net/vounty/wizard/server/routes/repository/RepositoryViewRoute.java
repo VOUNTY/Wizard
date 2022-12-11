@@ -1,15 +1,11 @@
 package net.vounty.wizard.server.routes.repository;
 
-import net.vounty.wizard.repository.content.Content;
 import net.vounty.wizard.server.routes.WizardRoute;
 import net.vounty.wizard.service.Wizard;
-import net.vounty.wizard.utils.config.DependencyConfiguration;
 import net.vounty.wizard.utils.enums.Visible;
 import spark.Request;
 import spark.Response;
 import spark.Spark;
-
-import java.util.List;
 
 public class RepositoryViewRoute extends WizardRoute {
 
@@ -32,26 +28,31 @@ public class RepositoryViewRoute extends WizardRoute {
         final var pathInfo = request.pathInfo()
                 .replace("/v/" + repositoryName + "/", "")
                 .replace("/", "//");
-        if (repository.getVisible().equals(Visible.PUBLIC))
-            return repository.viewFile(pathInfo);
+        if (repository.getVisible().equals(Visible.PUBLIC)) {
+            final var content = repository.viewFile(pathInfo);
+            if (content == null)
+                Spark.halt(500);
 
-        if (repository.getVisible().equals(Visible.PRIVATE)) {
-            final var authorization = request.headers("Authorization");
-            if (authorization == null)
-                Spark.halt(401);
-
-            final var optionalToken = this.getWizard().getTokenAdapter().getTokenFromAuthorization(authorization);
-            if (optionalToken.isEmpty())
-                Spark.halt(401);
-
-            final var token = optionalToken.get();
-            if (!repository.getTokens().contains(token.getUniqueId()))
-                Spark.halt(403);
-
-            return repository.viewFile(pathInfo);
+            return content;
         }
-        Spark.halt(204);
-        return null;
+
+        final var authorization = request.headers("Authorization");
+        if (authorization == null)
+            Spark.halt(401);
+
+        final var optionalToken = this.getWizard().getTokenAdapter().getTokenFromAuthorization(authorization);
+        if (optionalToken.isEmpty())
+            Spark.halt(401);
+
+        final var token = optionalToken.get();
+        if (!repository.getTokens().contains(token.getUniqueId()))
+            Spark.halt(403);
+
+        final var content = repository.viewFile(pathInfo);
+        if (content == null)
+            Spark.halt(500);
+
+        return content;
     }
 
 }

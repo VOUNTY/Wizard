@@ -23,7 +23,7 @@ public class WizardConfiguration {
         private final Integer port;
 
         public static Protocol getDefault() {
-            return new Protocol("127.0.0.1", 4677);
+            return new Protocol("0.0.0.0", 4677);
         }
 
     }

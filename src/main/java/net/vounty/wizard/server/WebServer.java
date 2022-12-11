@@ -4,12 +4,16 @@ import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import net.vounty.wizard.server.jetty.EmptyLogger;
 import net.vounty.wizard.server.routes.config.ConfigGetRoute;
 import net.vounty.wizard.server.routes.repository.*;
 import net.vounty.wizard.server.routes.token.TokenLoginRoute;
 import net.vounty.wizard.server.transform.JsonTransformer;
 import net.vounty.wizard.service.Wizard;
+import org.eclipse.jetty.util.log.Log;
 import spark.Spark;
+
+import java.util.function.Consumer;
 
 @Getter
 @Setter
@@ -19,7 +23,9 @@ public class WebServer implements Server {
     private final Wizard wizard;
 
     @Override
-    public void start() {
+    public void start(Consumer<String> host) {
+        Log.setLog(new EmptyLogger());
+
         final var gson = new Gson();
         final var configuration = this.getWizard().getConfigurationAdapter().getWizardConfiguration();
         Spark.ipAddress(configuration.getProtocol().getHost());
@@ -54,7 +60,7 @@ public class WebServer implements Server {
         Spark.put(":repository/*", new RepositoryDeployRoute(this.getWizard()));
 
         Spark.init();
-        this.getWizard().getLog().info("WebServer listening on §b{0}§r:§b{1}§r.", configuration.getProtocol().getHost(), Spark.port());
+        host.accept("§b" + configuration.getProtocol().getHost() + "§r:§b" + Spark.port() + "§r");
     }
 
     @Override
