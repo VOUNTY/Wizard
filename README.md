@@ -9,7 +9,7 @@
 * [Requirements](#requirements)
 * [Documentation](#documentation)
 * [Preview Images](#images)
-
+* [Installation using Docker](#installation-using-docker)
 ## About [❤]
 
 <a id="about"></a>
@@ -59,3 +59,23 @@ Documentation on installing and using **Wizard** can be found on the [official d
 ![04_l](./images/images_04_light.png)
 ![05_d](./images/images_05_dark.png)
 ![05_l](./images/images_05_light.png)
+
+## Installation using Docker
+
+
+```shell 
+git pull https://github.com/VountyNetwork/Wizard
+cd ./Wizard
+docker compose build
+docker compose run --rm --service-ports -d vounty-wizard ghci
+```
+This will start Wizard in detached mode. In order to attach it to your default output use
+
+```shell
+ docker attach wizard_vounty-wizard_run_[id]
+```
+
+[id] should be replaced by the container id, we recommend to press [TAB] after ...run_.\
+To exit attached mode press `[CTRL] + P & [CTRL] + Q`
+
+The config can be accessed under `/var/lib/docker/volumes/wizard_data/_data`
