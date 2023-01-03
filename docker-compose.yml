@@ -1,0 +1,12 @@
+services:
+  vounty-wizard:
+    build:
+      .
+    restart: always
+    ports:
+      - "4677:4677"
+    volumes:
+      - "data:/app"
+
+volumes:
+  data: {}
