@@ -81,7 +81,7 @@ public class TokenCommand extends WizardCommand {
             case 4 -> {
                 final var name = arguments.get(1);
                 final var action = arguments.get(2);
-                final var value = arguments.get(3);
+                final var value = new String[] { arguments.get(3) };
                 final var optionalToken = this.getWizard().getTokenAdapter().getToken(name);
                 switch (arguments.get(0).toLowerCase()) {
                     case "modify", "m", "edit", "e" -> {
@@ -89,7 +89,7 @@ public class TokenCommand extends WizardCommand {
 
                             switch (action.toLowerCase()) {
                                 case "name", "n" -> {
-                                    final var nameResult = token.changeName(value);
+                                    final var nameResult = token.changeName(value[0]);
                                     switch (nameResult) {
                                         case SUCCESS -> this.getLog().info("Name was successfully changed.");
                                         case EQUAL_NAME -> this.getLog().warn("This name is already set.");
@@ -97,9 +97,14 @@ public class TokenCommand extends WizardCommand {
                                     }
                                 }
                                 case "password", "p" -> {
-                                    final var passwordResult = token.changePassword(value);
+                                    final var isGenerate = value[0].equalsIgnoreCase("--generate");
+                                    if (isGenerate) value[0] = RandomStringUtils.randomAlphabetic(75);
+                                    final var passwordResult = token.changePassword(value[0]);
                                     switch (passwordResult) {
-                                        case SUCCESS -> this.getLog().info("Password was successfully changed.");
+                                        case SUCCESS -> {
+                                            this.getLog().info("Password was successfully changed.");
+                                            if (isGenerate) this.getLog().info("Generated password§8: §c{0}§r", value[0]);
+                                        }
                                         case EQUAL_PASSWORD -> this.getLog().warn("This password is already set.");
                                     }
                                 }
