@@ -11,6 +11,6 @@ RUN mkdir /app
 
 WORKDIR /app
 
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/Wizard-1.0.0-RELEASE.jar
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/Wizard.jar
 
-ENTRYPOINT ["java", "-jar", "/app/Wizard-1.0.0-RELEASE.jar", "ignoreRoot=true"]
+ENTRYPOINT ["java", "-jar", "/app/Wizard.jar", "ignoreRoot=true"]
