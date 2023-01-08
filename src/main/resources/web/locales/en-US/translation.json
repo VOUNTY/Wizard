@@ -61,6 +61,10 @@
     "fileView": {
       "title": "File view",
       "error": "Unable to read this file."
+    },
+    "usedDependency": {
+      "title": "Dependency",
+      "message": "You successfully copied the dependency."
     }
   }
 }

@@ -1,0 +1,70 @@
+{
+  "detail": {
+    "title": "Attuare",
+    "subTitle": "Scegliete il vostro quadro di riferimento",
+    "clipboard": {
+      "copy": "Copia",
+      "copied": "Copiato"
+    }
+  },
+  "list": {
+    "title": "Repository",
+    "empty": "Nessun contenuto trovato"
+  },
+  "dependencies": {
+    "title": "Dipendenze utilizzate",
+    "empty": "Nessun contenuto trovato"
+  },
+  "search": {
+    "title": "Ricerca",
+    "subTitle": "Ricerca di un deposito"
+  },
+  "login": {
+    "title": "Accesso",
+    "subTitle": "Accedere con i propri dati personali",
+    "form": {
+      "user": "Nome utente",
+      "password": "Password",
+      "submit": "Accedere al proprio account"
+    }
+  },
+  "logout": {
+    "title": "Disconnessione",
+    "subTitle": "Disconnettersi dalla sessione corrente",
+    "form": {
+      "submit": "Disconnessione dal proprio account"
+    }
+  },
+  "fileView": {
+    "title": "Anteprima del file",
+    "subTitle": "Si vede il contenuto del file"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "subTitle": "Personalizzare il sito web in base alle proprie esigenze",
+    "specialEndings": "Finale speciales",
+    "colorscheme": "Colori",
+    "language": "Lingua"
+  },
+  "notifications": {
+    "login": {
+      "title": "Accesso",
+      "noFields": "Compilare i campi.",
+      "wrongData": "Impossibile trovare un account con questi dati.",
+      "success": "Ora è stato effettuato l'accesso.",
+      "failed": "Si è verificato un errore durante il controllo."
+    },
+    "logout": {
+      "title": "Disconnessione",
+      "success": "Ora si è disconnessi."
+    },
+    "fileView": {
+      "title": "Visualizzazione del file",
+      "error": "Impossibile leggere questo file."
+    },
+    "usedDependency": {
+      "title": "Dipendenza",
+      "message": "La dipendenza è stata copiata con successo."
+    }
+  }
+}

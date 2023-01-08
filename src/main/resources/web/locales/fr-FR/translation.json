@@ -57,6 +57,14 @@
     "logout": {
       "title": "Déconnexion",
       "success": "Vous êtes maintenant déconnecté."
+    },
+    "fileView": {
+      "title": "Vue du fichier",
+      "error": "Impossible de lire ce fichier."
+    },
+    "usedDependency": {
+      "title": "Dépendance",
+      "error": "Vous avez réussi à copier la dépendance."
     }
   }
 }

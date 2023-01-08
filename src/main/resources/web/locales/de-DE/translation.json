@@ -57,6 +57,14 @@
     "logout": {
       "title": "Abmeldung",
       "success": "Du bist nun abgemeldet."
+    },
+    "fileView": {
+      "title": "Dateivorschau",
+      "error": "Konnte Datei nicht lesen."
+    },
+    "usedDependency": {
+      "title": "Abhängigkeit",
+      "error": "Du hast erfolgreich diese Abhängigkeit kopiert."
     }
   }
 }
