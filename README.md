@@ -1,6 +1,6 @@
 ## Wizard [🚀️]
 
-###### *Wizard is a light-weight repository management tool for processing implementations in frameworks like <br /> [Maven](https://maven.apache.org/), [Gradle Groovy](https://gradle.org/), [Gradle Kotlin](https://kotlinlang.org/docs/gradle.html), [SBT](https://www.scala-sbt.org/) and [Leiningen](https://leiningen.org/).*
+###### *Wizard is a light-weight repository management tool for processing implementations in frameworks like <br /> [Apache Maven](https://maven.apache.org/), [Apache Ivy](https://ant.apache.org/ivy/), [Apache BuildR](https://buildr.apache.org/), [Gradle Groovy](https://gradle.org/), [Gradle Kotlin](https://kotlinlang.org/docs/gradle.html), [SBT](https://www.scala-sbt.org/) and [Leiningen](https://leiningen.org/).*
 
 ### Navigation
 
