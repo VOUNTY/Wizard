@@ -54,7 +54,7 @@ public class WizardTokenAdapter extends WizardAdapter implements TokenAdapter {
                 .replace("Basic ", "")
                 .replace("Bearer ", "");
         final var decoded = new String(Base64.getDecoder().decode(data));
-        return decoded.split(":");
+        return decoded.replaceFirst(":", " ").split(" ");
     }
 
     @Override
