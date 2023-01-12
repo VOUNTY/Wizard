@@ -67,7 +67,7 @@ Documentation on installing and using **Wizard** can be found on the [official d
 git pull https://github.com/VountyNetwork/Wizard
 cd ./Wizard
 docker compose build
-docker compose run --rm --service-ports -d vounty-wizard ghci
+docker compose run --service-ports -d vounty-wizard ghci
 ```
 This will start Wizard in detached mode. In order to attach it to your default output use
 
