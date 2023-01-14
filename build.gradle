@@ -4,8 +4,8 @@ plugins {
     id 'maven-publish'
 }
 
-group 'net.vounty.wizard'
-version '1.0.3-RELEASE'
+group project.property("deploy_group")
+version project.property("deploy_version")
 
 java {
     sourceCompatibility = JavaVersion.VERSION_16
@@ -19,15 +19,15 @@ repositories {
 }
 
 dependencies {
-    implementation "org.mindrot:jbcrypt:0.4"
-    implementation 'com.google.code.gson:gson:2.9.0'
-    implementation 'org.jline:jline:3.21.0'
-    implementation "com.sparkjava:spark-core:2.9.4"
-    implementation "org.apache.commons:commons-lang3:3.12.0"
-    implementation "ch.qos.logback:logback-classic:1.2.11"
+    implementation "org.mindrot:jbcrypt:${bcrypt_version}"
+    implementation "com.google.code.gson:gson:${gson_version}"
+    implementation "org.jline:jline:${jline_version}"
+    implementation "com.sparkjava:spark-core:${spark_version}"
+    implementation "org.apache.commons:commons-lang3:${commons_lang_version}"
+    implementation "ch.qos.logback:logback-classic:${logback_version}"
 
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    compileOnly "org.projectlombok:lombok:${lombok_version}"
+    annotationProcessor "org.projectlombok:lombok:${lombok_version}"
 }
 
 tasks.withType(JavaCompile) {
@@ -42,9 +42,13 @@ jar {
         )
     }
 
-    from {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    from().duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from(configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/*.SF'
+        exclude 'META-INF/*.DSA'
+        exclude 'META-INF/*.RSA'
     }
 }
 
@@ -57,7 +61,7 @@ publishing {
     publications {
         maven(MavenPublication) {
             groupId = project.group
-            artifactId = 'Wizard'
+            artifactId = project.property("deploy_artifact")
             version = project.version
 
             from components.java
@@ -67,7 +71,7 @@ publishing {
 
     repositories {
         maven {
-            url = "https://wizard.vounty.net/${project.version.endsWith("RELEASE") ? 'releases' : 'snapshots'}"
+            url = "${deploy_url}${project.version.endsWith("RELEASE") ? 'releases' : 'snapshots'}"
             credentials {
                 username = project.hasProperty("deployName") ? project.property("deployName") : ""
                 password = project.hasProperty("deployPassword") ? project.property("deployPassword") : ""

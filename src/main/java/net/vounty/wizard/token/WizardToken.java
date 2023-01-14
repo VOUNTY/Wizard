@@ -15,15 +15,17 @@ public class WizardToken implements Token {
     private Boolean active;
     private String userName, password;
 
-    public WizardToken(String userName, String password) {
+    public WizardToken(String userName) {
         this.uniqueId = UUID.randomUUID();
         this.active = true;
         this.userName = userName;
-        this.password = BCrypt.hashpw(password, BCrypt.gensalt(10));
     }
 
     @Override
     public Boolean equalPassword(String password) {
+        if (this.getPassword() == null || this.getPassword().isEmpty())
+            return false;
+
         return BCrypt.checkpw(password, this.getPassword());
     }
 

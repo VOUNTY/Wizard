@@ -53,8 +53,9 @@ public class TokenCommand extends WizardCommand {
                     }
                     case "create", "c" -> {
                         optionalToken.ifPresentOrElse(token -> this.getLog().warn("Token with name/id '{0}' already exist.", name), () -> {
-                            final var password = RandomStringUtils.randomAlphabetic(75);
-                            final var newToken = new WizardToken(name, password);
+                            final var password = RandomStringUtils.randomAlphabetic(50);
+                            final var newToken = new WizardToken(name);
+                            newToken.changePassword(password);
                             final var result = this.getWizard().getTokenAdapter().registerToken(newToken);
                             if (result)
                                 this.getLog().info("Token §b{0}§r was successfully created. (Password: §c{1}§r)", name, password);
@@ -97,8 +98,13 @@ public class TokenCommand extends WizardCommand {
                                     }
                                 }
                                 case "password", "p" -> {
-                                    final var isGenerate = value[0].equalsIgnoreCase("--generate");
-                                    if (isGenerate) value[0] = RandomStringUtils.randomAlphabetic(75);
+                                    if (value[0].length() > 70) {
+                                        this.getLog().warn("BCrypt passwords may only contain 70 characters.");
+                                        return;
+                                    }
+
+                                    final var isGenerate = value[0].equalsIgnoreCase("--generate") || value[0].equalsIgnoreCase("--gen");
+                                    if (isGenerate) value[0] = RandomStringUtils.randomAlphabetic(50);
                                     final var passwordResult = token.changePassword(value[0]);
                                     switch (passwordResult) {
                                         case SUCCESS -> {
@@ -127,7 +133,7 @@ public class TokenCommand extends WizardCommand {
         this.getLog().usage("Use '§btoken§r'");
         this.getLog().usage("Use '§btoken list§r'");
         this.getLog().usage("Use '§btoken about, create, drop, toggle (§1Name§b)§r'");
-        this.getLog().usage("Use '§btoken modify (§1Name§b) name, password (§1Value§b)§r'");
+        this.getLog().usage("Use '§btoken modify (§1Name§b) name, password (§1Value §8{§b--generate§r, to generate password§8} §b)§r'");
     }
 
 }
