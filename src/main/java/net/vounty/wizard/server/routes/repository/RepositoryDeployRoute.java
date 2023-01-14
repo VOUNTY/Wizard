@@ -40,8 +40,10 @@ public class RepositoryDeployRoute extends WizardRoute {
             Spark.halt(403);
 
         final var xRealIp = request.headers("X-Real-IP");
-        if (this.getWizard().getSecureAdapter().existAddress(xRealIp))
+        if (this.getWizard().getSecureAdapter().existAddress(xRealIp)) {
+            this.getWizard().getLog().secure("Address §b{0}§r tried to deploy but was blocked.");
             Spark.halt(405);
+        }
 
         final var userAgent = request.headers("User-Agent");
         final var framework = Framework.fetch(userAgent);

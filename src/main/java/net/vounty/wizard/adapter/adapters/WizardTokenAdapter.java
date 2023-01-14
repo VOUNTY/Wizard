@@ -6,6 +6,8 @@ import net.vounty.wizard.repository.Repository;
 import net.vounty.wizard.service.Wizard;
 import net.vounty.wizard.token.Token;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Getter
@@ -43,6 +45,8 @@ public class WizardTokenAdapter extends WizardAdapter implements TokenAdapter {
             return false;
 
         final var target = optionalToken.get();
+        this.getRepositoriesFromToken(target).forEach(repository ->
+                repository.dropToken(target.getUniqueId()));
         this.getTokens().remove(target);
         this.getWizard().reload();
         return true;

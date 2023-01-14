@@ -14,6 +14,9 @@ public enum Framework {
     MAVEN("Maven"),
     SBT("SBT"),
     LEININGEN("Leiningen"),
+    IVY("Ivy"),
+    BUILDR("BuildR"),
+    GRAPE("Grape"),
 
     ;
 
