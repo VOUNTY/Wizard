@@ -17,13 +17,11 @@ import net.vounty.wizard.utils.enums.PathState;
 import net.vounty.wizard.utils.enums.Visible;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import spark.Spark;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
 
@@ -69,43 +67,40 @@ public class WizardRepository implements Repository {
     }
 
     @Override
-    public void download(HttpServletRequest request, Token token, Framework framework) throws Exception {
-        try {
-            final var path = request.getPathInfo();
-            final var paths = path.split("/");
-            final var fileName = paths[paths.length - 1];
+    public void download(HttpServletRequest request, Token token, Framework framework) throws IOException {
+        final var path = request.getPathInfo();
+        final var paths = path.split("/");
+        final var fileName = paths[paths.length - 1];
 
-            final var folderPath = path
-                    .replace(this.getName(), "")
-                    .replace(fileName, "");
+        final var folderPath = path
+                .replace(this.getName(), "")
+                .replace(fileName, "");
 
-            final var folder = new File(this.getFolder() + folderPath);
-            final var filePath = this.getFolder() + path.replace(this.getName(), "");
-            final var inputStream = request.getInputStream();
+        final var folder = new File(this.getFolder() + folderPath);
+        final var filePath = this.getFolder() + path.replace(this.getName(), "");
+        final var inputStream = request.getInputStream();
 
-            final var address = request.getHeader("X-Real-IP");
-            final var deploy = this.deployments.getOrDefault(address, new RepositoryDeploy(folder, new LinkedList<>()));
-            final var data = new RepositoryData(filePath, inputStream);
-            final var list = deploy.getDataList();
-            list.add(data);
-            if (list.size() >= 25) {
-                this.flushDeployment(deploy, address, token, framework);
-                this.deployments.remove(address);
-            } else this.deployments.put(address, deploy);
+        final var address = request.getHeader("X-Real-IP");
 
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        if (folder.exists() && !this.getMultipleDeployments()) {
+            Wizard.getService().getLog().warn("User §b{0}§r (§1{1}§r) tried to deploy on §b{2}§r but multi deployments are disabled.",
+                    token.getUserName(), address, this.getName());
+            Spark.halt(403);
         }
+
+        final var deploy = this.deployments.getOrDefault(address, new RepositoryDeploy(folder, new LinkedList<>()));
+        final var data = new RepositoryData(filePath, inputStream);
+        final var list = deploy.getDataList();
+        list.add(data);
+        if (list.size() >= 25) {
+            this.flushDeployment(deploy, address, token, framework);
+            this.deployments.remove(address);
+        } else this.deployments.put(address, deploy);
     }
 
     private void flushDeployment(Deploy deploy, String address, Token token, Framework framework) {
         final var folder = deploy.getFolder();
         final var list = deploy.getDataList();
-        if (folder.exists() && !this.getMultipleDeployments()) {
-            Wizard.getService().getLog().warn("User §b{0}§r (§1{1}§r) tried to deploy on §b{2}§r but multi deployments are disabled.",
-                    token.getUserName(), address, this.getName());
-            return;
-        }
 
         if (!folder.exists())
             folder.mkdirs();
