@@ -48,9 +48,7 @@ public class RepositoryDeployRoute extends WizardRoute {
         final var userAgent = request.headers("User-Agent");
         final var framework = Framework.fetch(userAgent);
 
-        repository.download(request.raw());
-        this.getWizard().getLog().info("User §b{0}§r (§1{1}§r) deploying on §b{2}§r via §1{3}§r",
-                token.getUserName(), xRealIp, repository.getName(), framework);
+        repository.download(request.raw(), token, framework);
         return null;
     }
 

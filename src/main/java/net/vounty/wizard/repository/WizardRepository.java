@@ -5,9 +5,14 @@ import lombok.Setter;
 import net.vounty.wizard.repository.content.Content;
 import net.vounty.wizard.repository.content.RepositoryContent;
 import net.vounty.wizard.repository.content.RepositoryDependency;
+import net.vounty.wizard.repository.deploy.Deploy;
+import net.vounty.wizard.repository.deploy.RepositoryData;
+import net.vounty.wizard.repository.deploy.RepositoryDeploy;
 import net.vounty.wizard.server.routes.repository.RepositoryContentRoute;
 import net.vounty.wizard.service.Wizard;
+import net.vounty.wizard.token.Token;
 import net.vounty.wizard.utils.config.DependencyConfiguration;
+import net.vounty.wizard.utils.enums.Framework;
 import net.vounty.wizard.utils.enums.PathState;
 import net.vounty.wizard.utils.enums.Visible;
 import org.w3c.dom.Document;
@@ -20,10 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.nio.file.Files;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -33,12 +35,25 @@ public class WizardRepository implements Repository {
     private final List<UUID> tokens;
     private String name;
     private Visible visible;
+    private Boolean multipleDeployments;
+
+    private transient Map<String, Deploy> deployments;
 
     public WizardRepository(String name) {
         this.uniqueId = UUID.randomUUID();
         this.tokens = new LinkedList<>();
         this.name = name;
         this.visible = Visible.PUBLIC;
+        this.multipleDeployments = false;
+    }
+
+    @Override
+    public Repository updateMissingFields() {
+        this.deployments = new LinkedHashMap<>();
+
+        if (this.multipleDeployments == null) this.multipleDeployments = false;
+        if (this.visible == null) this.visible = Visible.PUBLIC;
+        return this;
     }
 
     public Repository createFolder() {
@@ -54,26 +69,64 @@ public class WizardRepository implements Repository {
     }
 
     @Override
-    public void download(HttpServletRequest request) throws Exception {
-        final var path = request.getPathInfo();
-        final var paths = path.split("/");
-        final var fileName = paths[paths.length - 1];
+    public void download(HttpServletRequest request, Token token, Framework framework) throws Exception {
+        try {
+            final var path = request.getPathInfo();
+            final var paths = path.split("/");
+            final var fileName = paths[paths.length - 1];
 
-        final var folderPath = path
-                .replace(this.getName(), "")
-                .replace(fileName, "");
+            final var folderPath = path
+                    .replace(this.getName(), "")
+                    .replace(fileName, "");
 
-        final var folder = new File(this.getFolder() + folderPath);
-        folder.mkdirs();
+            final var folder = new File(this.getFolder() + folderPath);
+            final var filePath = this.getFolder() + path.replace(this.getName(), "");
+            final var inputStream = request.getInputStream();
 
-        final var filePath = this.getFolder() + path.replace(this.getName(), "");
-        final var file = new File(filePath);
-        final var inputStream = request.getInputStream();
-        final var outputStream = new FileOutputStream(file);
-        inputStream.transferTo(outputStream);
+            final var address = request.getHeader("X-Real-IP");
+            final var deploy = this.deployments.getOrDefault(address, new RepositoryDeploy(folder, new LinkedList<>()));
+            final var data = new RepositoryData(filePath, inputStream);
+            final var list = deploy.getDataList();
+            list.add(data);
+            if (list.size() >= 25) {
+                this.flushDeployment(deploy, address, token, framework);
+                this.deployments.remove(address);
+            } else this.deployments.put(address, deploy);
 
-        outputStream.close();
-        inputStream.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void flushDeployment(Deploy deploy, String address, Token token, Framework framework) {
+        final var folder = deploy.getFolder();
+        final var list = deploy.getDataList();
+        if (folder.exists() && !this.getMultipleDeployments()) {
+            Wizard.getService().getLog().warn("User §b{0}§r (§1{1}§r) tried to deploy on §b{2}§r but multi deployments are disabled.",
+                    token.getUserName(), address, this.getName());
+            return;
+        }
+
+        if (!folder.exists())
+            folder.mkdirs();
+
+        list.forEach(data -> {
+            final var path = data.getPath();
+            final var inputStream = data.getInputStream();
+
+            try {
+                final var file = new File(path);
+                final var outputStream = new FileOutputStream(file);
+                inputStream.transferTo(outputStream);
+                outputStream.close();
+                inputStream.close();
+            } catch (Exception exception) {
+                Wizard.getService().getLog().trace(exception);
+            }
+        });
+
+        Wizard.getService().getLog().info("User §b{0}§r (§1{1}§r) deploying on §b{2}§r via §1{3}§r",
+                token.getUserName(), address, this.getName(), framework);
     }
 
     @Override
@@ -211,6 +264,15 @@ public class WizardRepository implements Repository {
             case HIDDEN -> this.setVisible(Visible.PRIVATE);
             case PRIVATE -> this.setVisible(Visible.PUBLIC);
         }
+    }
+
+    @Override
+    public void toggleMultipleDeployments() {
+        if (this.getMultipleDeployments() == null) {
+            this.setMultipleDeployments(true);
+            return;
+        }
+        this.setMultipleDeployments(!this.getMultipleDeployments());
     }
 
     @Override

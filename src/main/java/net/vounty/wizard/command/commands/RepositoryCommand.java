@@ -28,7 +28,7 @@ public class RepositoryCommand extends WizardCommand {
                         }
                         this.getLog().info("List all §b{0}§r repositories:", repositories.size());
                         repositories.forEach(repository ->
-                                this.getLog().info(" §b{0}§r (ID: §1{1}§r, Visible: §1{2}§r)", repository.getName(), repository.getUniqueId(), repository.getVisible()));
+                                this.getLog().info(" §b{0}§r (ID: §1{1}§r, Visible: §1{2}§r, MultipleDeployments: §1{3}§r)", repository.getName(), repository.getUniqueId(), repository.getVisible(), repository.getMultipleDeployments()));
                     }
                     default -> { return true; }
                 }
@@ -67,10 +67,26 @@ public class RepositoryCommand extends WizardCommand {
                                     result ? "Repository §b{0}§r was successfully removed." : "Unable to remove repository §b{0}§r. Try again later.", name);
                         }, () -> this.getLog().error("Cannot find repository with name or id '§b{0}§r'", name));
                     }
+                    default -> { return true; }
+                }
+            }
+            case 3 -> {
+                final var name = arguments.get(1);
+                final var optionalRepository = this.getWizard().getRepositoryAdapter().getRepository(name);
+                switch (arguments.get(0).toLowerCase()) {
                     case "toggle", "t" -> {
                         optionalRepository.ifPresentOrElse(repository -> {
-                            repository.toggleVisible();
-                            this.getLog().info("The repository §b{0}§r is now §b{1}§r.", name, repository.getVisible());
+                            switch (arguments.get(2).toLowerCase()) {
+                                case "visible", "v" -> {
+                                    repository.toggleVisible();
+                                    this.getLog().info("The repository §b{0}§r is now §b{1}§r.", name, repository.getVisible());
+                                }
+                                case "multipledeployments", "multideploy", "multipledeploy", "multideployments", "md" -> {
+                                    repository.toggleMultipleDeployments();
+                                    this.getLog().info("Multiple deployments of repository §b{0}§r are now §b{1}§r.", name, repository.getMultipleDeployments() ? "enabled" : "disabled");
+                                }
+                                default -> this.getLog().warn("Use '§brepository§r' for more help.");
+                            }
                         }, () -> this.getLog().error("Cannot find repository with name or id '§b{0}§r'", name));
                     }
                     default -> { return true; }
@@ -140,7 +156,8 @@ public class RepositoryCommand extends WizardCommand {
     public void displayUsage() {
         this.getLog().usage("Use '§brepository§r'");
         this.getLog().usage("Use '§brepository list§r'");
-        this.getLog().usage("Use '§brepository about, create, drop, toggle (§1Name§b)§r'");
+        this.getLog().usage("Use '§brepository toggle (§1Name§b) visible,multiDeployments§r'");
+        this.getLog().usage("Use '§brepository about, create, drop (§1Name§b)§r'");
         this.getLog().usage("Use '§brepository modify (§1Name§b) name (§1Value§b)§r'");
         this.getLog().usage("Use '§brepository token (§1Name§b) add, drop (§1Token§b)§r'");
     }
