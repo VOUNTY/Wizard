@@ -24,7 +24,7 @@ public class WizardRepositoryAdapter extends WizardAdapter implements Repository
     public void loadFromConfiguration() {
         this.getRepositories().clear();
         this.getWizard().getConfigurationAdapter().getRepositoriesConfiguration().getRepositories()
-                .forEach(wizardRepository -> this.getRepositories().add(wizardRepository.createFolder()));
+                .forEach(wizardRepository -> this.getRepositories().add(wizardRepository.createFolder().updateMissingFields()));
     }
 
     @Override
