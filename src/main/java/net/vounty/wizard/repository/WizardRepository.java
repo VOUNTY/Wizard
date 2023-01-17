@@ -24,6 +24,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Getter
 @Setter
@@ -35,6 +37,7 @@ public class WizardRepository implements Repository {
     private Visible visible;
     private Boolean multipleDeployments;
 
+    private transient Map<String, Long> lastDeployment;
     private transient Map<String, Deploy> deployments;
 
     public WizardRepository(String name) {
@@ -48,6 +51,7 @@ public class WizardRepository implements Repository {
     @Override
     public Repository updateMissingFields() {
         this.deployments = new LinkedHashMap<>();
+        this.lastDeployment = new LinkedHashMap<>();
 
         if (this.multipleDeployments == null) this.multipleDeployments = false;
         if (this.visible == null) this.visible = Visible.PUBLIC;
@@ -88,14 +92,28 @@ public class WizardRepository implements Repository {
             Spark.halt(403);
         }
 
+        if (!this.lastDeployment.containsKey(address))
+            Wizard.getService().getLog().info("User §b{0}§r (§1{1}§r) deploying to repository §b{2}§r...",
+                    token.getUserName(), address, this.getName());
+
         final var deploy = this.deployments.getOrDefault(address, new RepositoryDeploy(folder, new LinkedList<>()));
         final var data = new RepositoryData(filePath, inputStream);
         final var list = deploy.getDataList();
         list.add(data);
-        if (list.size() >= 25) {
-            this.flushDeployment(deploy, address, token, framework);
-            this.deployments.remove(address);
-        } else this.deployments.put(address, deploy);
+
+        this.lastDeployment.put(address, System.currentTimeMillis());
+        this.deployments.put(address, deploy);
+
+        Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+
+            final var lastDeployed = this.lastDeployment.getOrDefault(address, System.currentTimeMillis());
+            if (System.currentTimeMillis() - lastDeployed >= 1000) {
+                this.flushDeployment(deploy, address, token, framework);
+                this.deployments.remove(address);
+                this.lastDeployment.remove(address);
+            }
+
+        }, 2, TimeUnit.SECONDS);
     }
 
     private void flushDeployment(Deploy deploy, String address, Token token, Framework framework) {
@@ -120,7 +138,7 @@ public class WizardRepository implements Repository {
             }
         });
 
-        Wizard.getService().getLog().info("User §b{0}§r (§1{1}§r) deploying on §b{2}§r via §1{3}§r",
+        Wizard.getService().getLog().info("User §b{0}§r (§1{1}§r) deployed on §b{2}§r via §1{3}§r",
                 token.getUserName(), address, this.getName(), framework);
     }
 
